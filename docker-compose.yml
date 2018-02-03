@@ -1,0 +1,21 @@
+nginx:
+  build: .docker/nginx/Dockerfile
+  ports: [ 80:80 ]
+  links: [ php ]
+  volumes:
+    - ./app:/var/app
+
+php:
+  image: 7.2-fpm-alpine
+  ports: [ 9000:9000 ]
+  links: [ mysql ]
+  volumes:
+    - ./app:/var/app
+
+mysql:
+  image: mysql:5.7
+  ports: [ 3306:3306 ]
+  volumes:
+    - ./data:/var/lib/mysql
+  environment:
+    - MYSQL_ROOT_PASSWORD=password
