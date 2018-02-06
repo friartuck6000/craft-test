@@ -11,7 +11,7 @@ services:
       - ./app:/var/app
 
   php-fpm:
-    image: php:7.2-alpine
+    build: ./.docker/config/php
     ports:
       - '9000:9000'
     volumes:
@@ -23,3 +23,6 @@ services:
       - '3306:3306'
     volumes:
       - ./.docker/data/db:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=craft
