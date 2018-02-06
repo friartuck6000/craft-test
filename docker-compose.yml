@@ -1,21 +1,25 @@
-nginx:
-  build: .docker/nginx/Dockerfile
-  ports: [ 80:80 ]
-  links: [ php ]
-  volumes:
-    - ./app:/var/app
+version: '3'
+services:
 
-php:
-  image: 7.2-fpm-alpine
-  ports: [ 9000:9000 ]
-  links: [ mysql ]
-  volumes:
-    - ./app:/var/app
+  nginx:
+    build: ./.docker/config/nginx
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      - ./.docker/log/nginx:/var/log/nginx
+      - ./app:/var/app
 
-mysql:
-  image: mysql:5.7
-  ports: [ 3306:3306 ]
-  volumes:
-    - ./data:/var/lib/mysql
-  environment:
-    - MYSQL_ROOT_PASSWORD=password
+  php-fpm:
+    image: php:7.2-alpine
+    ports:
+      - '9000:9000'
+    volumes:
+      - ./app:/var/app
+
+  db:
+    image: mariadb
+    ports:
+      - '3306:3306'
+    volumes:
+      - ./.docker/data/db:/var/lib/mysql
