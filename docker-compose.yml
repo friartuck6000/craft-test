@@ -3,6 +3,8 @@ services:
 
   nginx:
     build: ./.docker/config/nginx
+    depends_on:
+      - php-fpm
     ports:
       - '80:80'
       - '443:443'
@@ -12,6 +14,8 @@ services:
 
   php-fpm:
     build: ./.docker/config/php
+    depends_on:
+      - db
     ports:
       - '9000:9000'
     volumes:
@@ -24,5 +28,5 @@ services:
     volumes:
       - ./.docker/data/db:/var/lib/mysql
     environment:
-      - MYSQL_ROOT_PASSWORD=password
-      - MYSQL_DATABASE=craft
+      - 'MYSQL_ROOT_PASSWORD=password'
+      - 'MYSQL_DATABASE=craft'
